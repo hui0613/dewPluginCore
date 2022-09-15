@@ -7,9 +7,11 @@ export default class Plugin {
   private pluginConfigure: PluginConfigure | null = null
   private pluginInstance = null
   private $context: any = null
-  constructor(pluginRootPath: string, pluginConfigure: PluginConfigure) {
+  private hooks: any
+  constructor(pluginRootPath: string, pluginConfigure: PluginConfigure, hooks: any) {
     this.pluginRootPath = pluginRootPath
     this.pluginConfigure = pluginConfigure
+    this.hooks = hooks
   }
 
   /**
@@ -21,7 +23,8 @@ export default class Plugin {
     const pluginClass = require(entry).default
 
     this.$context = {
-      rootPath: this.pluginRootPath,
+      pluginPath: this.pluginRootPath,
+      hooks: this.hooks
     }
 
     if (pluginClass instanceof Function) {

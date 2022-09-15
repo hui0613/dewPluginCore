@@ -7,9 +7,11 @@ import PluginConfigure from './PluginConfigure'
 export default class PluginInstaller {
   private pluginRootDir = ''
   private pluginMap: Map<string, Plugin> = new Map<string, Plugin>()
+  private hooks: any
 
-  constructor(pluginPath: string) {
+  constructor(pluginPath: string, hooks: any) {
     this.pluginRootDir = pluginPath
+    this.hooks = hooks
 
     this.loadAllPlugins()
   }
@@ -26,17 +28,15 @@ export default class PluginInstaller {
       const fullPath = path.resolve(this.pluginRootDir, pluginDirName)
       const pluginConfigure = new PluginConfigure(fullPath)
 
-      const plugin = new Plugin(fullPath, pluginConfigure)
+      const plugin = new Plugin(fullPath, pluginConfigure, this.hooks)
 
       this.pluginMap.set(pluginConfigure.id, plugin)
     }
-    this.start()
   }
 
-  // 启动插件
-  start() {
-    for (const plugin of this.pluginMap.values()) {
-      plugin.start()
-    }
+  get plugins(){
+    return Array.from(this.pluginMap.values())
   }
+
+  
 }

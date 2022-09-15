@@ -15,4 +15,9 @@ export default class DewCore {
     }
     return DewCore.dewInstance
   }
+
+  public createArticle(){
+    this.framework?.createArticle()
+  }
+  
 }
